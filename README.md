@@ -13,6 +13,9 @@ The purpose is to remove old support libraries so we no longer need to use jetif
 
 It will be used with the forked [AndroidPdFViewer](https://github.com/mhiew/AndroidPdfViewer)
 
+## What's new in 1.9.2
+This is functionally the same as 1.9.1 just fixing some documentation on maven central
+
 ## What's new in 1.9.1
 * Update Gradle plugins and configurations
 * Update compile sdk to 31
@@ -31,7 +34,7 @@ It will be used with the forked [AndroidPdFViewer](https://github.com/mhiew/Andr
 ## Installation
 Add to _build.gradle_:
 
-`compile 'com.github.mhiew:pdfium-android:1.9.1'`
+`compile 'com.github.mhiew:pdfium-android:1.9.2'`
 
 Library is available in jcenter and Maven Central repositories.
 

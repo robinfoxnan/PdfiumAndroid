@@ -1,3 +1,6 @@
+## 1.9.2 (2022-05-22)
+* Functionally the same as 1.9.1. Just fixing some documentation errors on Maven Central
+
 ## 1.9.1 (2022-05-22)
 * Update Gradle plugins and configurations
 * Update compile sdk to 31
