@@ -7,8 +7,14 @@ Forked for use with [AndroidPdfViewer](https://github.com/barteksc/AndroidPdfVie
 
 API is highly compatible with original version, only additional methods were created.
 
+# This repo was forked from [PdfiumAndroid](https://github.com/barteksc/PdfiumAndroid)
+
+The purpose is to remove old support libraries so we no longer need to use jetifier.
+
+It will be used with the forked [AndroidPdFViewer](https://github.com/mhiew/AndroidPdfViewer)
+
 ## What's new in 1.9.1
-* Update Gradle plugins
+* Update Gradle plugins and configurations
 * Update compile sdk to 31
 * Change minimum SDK to 19
 * Remove support-v4 library
@@ -25,7 +31,7 @@ API is highly compatible with original version, only additional methods were cre
 ## Installation
 Add to _build.gradle_:
 
-`compile 'com.github.barteksc:pdfium-android:1.9.0'`
+`compile 'com.github.mhiew:pdfium-android:1.9.1'`
 
 Library is available in jcenter and Maven Central repositories.
 

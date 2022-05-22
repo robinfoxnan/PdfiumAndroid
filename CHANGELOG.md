@@ -1,3 +1,10 @@
+## 1.9.1 (2022-05-22)
+* Update Gradle plugins and configurations
+* Update compile sdk to 31
+* Change minimum SDK to 19
+* Remove support-v4 library
+* Drop support for mips
+
 ## 1.9.0 (2018-06-29)
 * Updated Pdfium library to 7.1.2_r36
 * Changed `gnustl_static` to `c++_shared`
