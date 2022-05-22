@@ -7,6 +7,13 @@ Forked for use with [AndroidPdfViewer](https://github.com/barteksc/AndroidPdfVie
 
 API is highly compatible with original version, only additional methods were created.
 
+## What's new in 1.9.1
+* Update Gradle plugins
+* Update compile sdk to 31
+* Change minimum SDK to 19
+* Remove support-v4 library
+* Drop support for mips
+
 ## What's new in 1.9.0?
 * Updated Pdfium library to 7.1.2_r36
 * Changed `gnustl_static` to `c++_shared`
