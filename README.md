@@ -1,4 +1,9 @@
+备注：这个东西，引用时候找不到库，所以只能自己编译一个，然后把AAR文件拷贝过去，
+
+我使用了JDK11，SDK34,  MIN19, TARGET:31
+
 # Pdfium Android binding with Bitmap rendering
+
 Uses pdfium library [from AOSP](https://android.googlesource.com/platform/external/pdfium/)
 
 The demo app (for not modified lib) is [here](https://github.com/mshockwave/PdfiumAndroid-Demo-App)
