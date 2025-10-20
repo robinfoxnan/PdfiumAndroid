@@ -15,26 +15,41 @@ android {
     compileSdkVersion 34
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion  31
         targetSdkVersion 31
         versionCode 1
         versionName "1.9.2"
         buildConfigField 'String', 'VERSION_NAME', "\"${defaultConfig.versionName}\""
+
+        // 指定 ABI，确保 native 库被打包
+//        ndk {
+//            abiFilters += ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
+//        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled false
+            // 确保 Debug 模式也包含 JNI
+            ndk {
+                //abiFilters += ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]
+                abiFilters.clear()
+            }
+        }
     }
 
-    sourceSets{
+    sourceSets {
         main {
-            jni.srcDirs = []
-            jniLibs.srcDir 'src/main/libs'
+            jniLibs.srcDirs = ['src/main/jniLibs'] // 指向你的 so 文件夹
         }
     }
 }
+
 
 repositories {
     google()
@@ -53,3 +68,64 @@ ext {
 }
 
 apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
+
+
+// ==========================================
+// 检查 JNI 方法的任务
+// ==========================================
+tasks.register("checkNativeMethods") {
+    doLast {
+        def jniDir = file("src/main/jniLibs")
+        if (!jniDir.exists()) {
+            println "No jniLibs directory found, skipping JNI check."
+            return
+        }
+
+        // 遍历所有 .so 文件
+        jniDir.eachFileRecurse { f ->
+            if (f.isFile() && f.name.endsWith(".so")) {
+                println "Checking ${f.name}"
+
+                // 执行 nm 命令查看导出符号
+                def process = ["nm", "-D", f.absolutePath].execute()
+                process.waitFor()
+                def output = process.text
+
+                // 检查关键 JNI 方法是否存在
+                if (!output.contains("Java_com_shockwave_pdfium_PdfiumCore_nativeOpenDocument")) {
+                    throw new GradleException("${f.name} does not contain nativeOpenDocument!")
+                }
+            }
+        }
+        println "All JNI libraries passed the check."
+    }
+}
+
+// ==========================================
+// 绑定检查任务到所有 Release 任务
+// ==========================================
+afterEvaluate {
+    // 适用于 Library 模块：libraryVariants
+    if (project.plugins.hasPlugin("com.android.library")) {
+        android.libraryVariants.all { variant ->
+            if (variant.buildType.name.toLowerCase() == "release") {
+                variant.assembleProvider.get().dependsOn(tasks.named("checkNativeMethods"))
+            }
+        }
+    }
+
+    // 适用于 App 模块（可选）
+    if (project.plugins.hasPlugin("com.android.application")) {
+        android.applicationVariants.all { variant ->
+            if (variant.buildType.name.toLowerCase() == "release") {
+                variant.assembleProvider.get().dependsOn(tasks.named("checkNativeMethods"))
+            }
+        }
+    }
+
+    // 通用兜底（匹配名称含 assemble 和 release 的任务）
+    tasks.matching { it.name.toLowerCase().contains("assemble") && it.name.toLowerCase().contains("release") }.all { t ->
+        t.dependsOn(tasks.named("checkNativeMethods"))
+    }
+}
+
